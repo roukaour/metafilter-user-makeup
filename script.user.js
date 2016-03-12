@@ -3,7 +3,7 @@
 // @namespace   https://github.com/roukaour/
 // @description Assigns each MetaFilter user a random but consistent color and symbol.
 // @include     *://*.metafilter.com/*
-// @version     1.0
+// @version     1.1
 // @grant       none
 // @run-at      document-end
 // ==/UserScript==
@@ -49,8 +49,8 @@ function assignColors() {
 		var hash = hashCode(username);
 		var colorSpan = hashToColorSpan(hash);
 		var symbol = hashToSymbol(hash);
-		userlink.innerHTML = hashToColorSpan(hash) +
-			"<big>" + symbol + "</big> " + username + "</span>";
+		userlink.innerHTML = colorSpan + "<big>" + symbol + "</big> " +
+			username + "</span>";
 	}
 }
 
