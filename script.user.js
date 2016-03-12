@@ -3,7 +3,7 @@
 // @namespace   https://github.com/roukaour/
 // @description Assigns each MetaFilter user a random but consistent color and symbol.
 // @include     *://*.metafilter.com/*
-// @version     1.1
+// @version     1.2
 // @grant       none
 // @run-at      document-end
 // ==/UserScript==
@@ -24,12 +24,12 @@ function hashCode(s) {
 function hashToColorSpan(x) {
 	// Based on Cristian Sanchez's code:
 	// http://stackoverflow.com/a/3426956/70175
-	var fore = (x & 0xFFFFFF).toString(16).toUpperCase();
-	fore = "00000".substring(0, 6 - fore.length) + fore;
+	var color = (x & 0xFFFFFF).toString(16).toUpperCase();
+	color = "00000".substring(0, 6 - color.length) + color;
 	var r = (x & 0xFF0000) >> 16, g = (x & 0xFF00) >> 8, b = x & 0xFF;
 	var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-	var back = luma >= 165 ? "000" : "FFF";
-	return "<span style='color: #" + fore + "; background: #" + back + ";'>";
+	var contrast = luma >= 165 ? "000" : "FFF";
+	return "<span style='background: #" + color + "; color: #" + contrast + ";'>";
 }
 
 function hashToSymbol(x) {
