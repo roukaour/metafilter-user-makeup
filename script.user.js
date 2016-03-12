@@ -3,7 +3,7 @@
 // @namespace   https://github.com/roukaour/
 // @description Assigns each MetaFilter user a random but consistent color and symbol.
 // @include     *://*.metafilter.com/*
-// @version     1.2
+// @version     1.3
 // @grant       none
 // @run-at      document-end
 // ==/UserScript==
@@ -25,15 +25,15 @@ function hashToColorSpan(x) {
 	// Based on Cristian Sanchez's code:
 	// http://stackoverflow.com/a/3426956/70175
 	var color = (x & 0xFFFFFF).toString(16).toUpperCase();
-	color = "00000".substring(0, 6 - color.length) + color;
+	color = '00000'.substring(0, 6 - color.length) + color;
 	var r = (x & 0xFF0000) >> 16, g = (x & 0xFF00) >> 8, b = x & 0xFF;
 	var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-	var contrast = luma >= 165 ? "000" : "FFF";
-	return "<span style='background: #" + color + "; color: #" + contrast + ";'>";
+	var contrast = luma >= 165 ? '000' : 'FFF';
+	return '<span style="background: #' + color + '; color: #' + contrast + ';">';
 }
 
 function hashToSymbol(x) {
-	var symbols = "●■▲▼◆▰★✪♠♣♥♦◈◉✠✿";
+	var symbols = '●■▲▼◆▰★✪♠♣♥♦◈◉✠✿';
 	var i = (x & 0xF000000) / 0x1000000;
 	return symbols.substring(i, i + 1);
 }
@@ -43,14 +43,14 @@ function assignColors() {
 	var i = bylines.length;
 	while (i--) {
 		var byline = bylines[i];
-		if (!byline.innerHTML.startsWith("posted by")) continue;
+		if (!byline.innerHTML.startsWith('posted by')) continue;
 		var userlink = byline.getElementsByTagName('a')[0];
 		var username = userlink.innerHTML;
 		var hash = hashCode(username);
 		var colorSpan = hashToColorSpan(hash);
 		var symbol = hashToSymbol(hash);
-		userlink.innerHTML = colorSpan + "<big>" + symbol + "</big> " +
-			username + "</span>";
+		userlink.innerHTML = colorSpan + '<big>' + symbol + '</big> ' +
+			username + '</span>';
 	}
 }
 
