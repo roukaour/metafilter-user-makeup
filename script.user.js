@@ -3,7 +3,8 @@
 // @namespace   https://github.com/roukaour/
 // @description Assigns each MetaFilter user a random but consistent color and symbol.
 // @include     *://*.metafilter.com/*
-// @version     1.5
+// @require     https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js
+// @version     1.6
 // @grant       none
 // @run-at      document-end
 // ==/UserScript==
@@ -19,7 +20,7 @@ function hashCode(s) {
 		hash = s.charCodeAt(i) + ((hash << 5) - hash);
 	}
 	return hash;
-}
+} 
 
 function luma(r, g, b) {
 	// sRGB to RGB and RGB to luma formulas from W3C accessibility guidelines
@@ -52,7 +53,7 @@ function hashToSymbol(x) {
 	return symbols.substring(i, i + 1);
 }
 
-function assignColors() {
+function applyMakeup() {
 	var bylines = document.getElementsByClassName('smallcopy');
 	var i = bylines.length;
 	while (i--) {
@@ -60,10 +61,12 @@ function assignColors() {
 		if (!byline.innerHTML.startsWith('posted by')) continue;
 		var userlink = byline.getElementsByTagName('a')[0];
 		var username = userlink.innerHTML;
+		if (username.startsWith('<span style=')) continue;
 		var hash = hashCode(username);
 		userlink.innerHTML = hashToColorSpan(hash) +
 			'<big>' + hashToSymbol(hash) + '</big> ' + username + '</span>';
 	}
 }
 
-document.addEventListener('DOMContentLoaded', assignColors, true);
+applyMakeup();
+$("#newcomments").on('mefi-comments', applyMakeup);
