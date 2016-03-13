@@ -3,7 +3,7 @@
 // @namespace   https://github.com/roukaour/
 // @description Assigns each MetaFilter user a random but consistent color and symbol.
 // @include     *://*.metafilter.com/*
-// @version     1.4
+// @version     1.5
 // @grant       none
 // @run-at      document-end
 // ==/UserScript==
@@ -28,9 +28,9 @@ function luma(r, g, b) {
 	for (var i = 0; i < 3; i++) {
 		c[i] /= 255;
 		if (c[i] <= 0.03928) {
-			c /= 12.92;
+			c[i] /= 12.92;
 		} else {
-			c = Math.pow((c + 0.055) / 1.055, 2.4);
+			c[i] = Math.pow((c[i] + 0.055) / 1.055, 2.4);
 		}
 	}
 	return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
