@@ -13,10 +13,6 @@
 // https://metatalk.metafilter.com/24039/Color-Comments-By-User
 // https://github.com/valrus/mefi-comment-colors/
 
-// Tip from GreaseSpot wiki
-// http://wiki.greasespot.net/@grant#Scope
-this.$ = this.jQuery = jQuery.noConflict(true);
-
 function hashCode(s) {
 	// String#hashCode from Java
 	var hash = 0;
@@ -26,10 +22,10 @@ function hashCode(s) {
 	return hash;
 }
 
-function luma(r, g, b) {
+function luma(rgb) {
 	// sRGB to RGB and RGB to luma formulas from W3C accessibility guidelines
 	// https://www.w3.org/TR/WCAG20/#relativeluminancedef
-	var c = [r, g, b];
+	var c = [(rgb & 0xFF0000) >> 16, (rgb & 0xFF00) >> 8, rgb & 0xFF];
 	for (var i = 0; i < 3; i++) {
 		c[i] /= 255;
 		if (c[i] <= 0.03928) {
@@ -41,20 +37,15 @@ function luma(r, g, b) {
 	return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
 }
 
-function hashToColorSpan(x) {
-	// Based on Cristian Sanchez's code:
-	// http://stackoverflow.com/a/3426956/70175
-	var color = (x & 0xFFFFFF).toString(16).toUpperCase();
-	color = '00000'.substring(0, 6 - color.length) + color;
-	var r = (x & 0xFF0000) >> 16, g = (x & 0xFF00) >> 8, b = x & 0xFF;
-	var contrast = luma(r, g, b) > 0.179 ? '000' : 'FFF';
-	return '<span style="background: #' + color + '; color: #' + contrast + ';">';
-}
-
-function hashToSymbol(x) {
+function hashToMakeup(hash) {
 	var symbols = '●■▲▼◆▰★✪♠♣♥♦◈◉✠✿';
-	var i = (x & 0xF000000) >> 24;
-	return symbols.substring(i, i + 1);
+	var i = (hash & 0xF000000) >> 24;
+	var symbol = symbols.charAt(i);
+	var rgb = hash & 0xFFFFFF;
+	var color = rgb.toString(16);
+	color = '#' + '00000'.substring(0, 6 - color.length) + color;
+	var contrast = luma(rgb) > 0.179 ? 'black' : 'white';
+	return {symbol: symbol, color: color, contrast: contrast};
 }
 
 function applyMakeup() {
@@ -62,13 +53,14 @@ function applyMakeup() {
 	var i = bylines.length;
 	while (i--) {
 		var byline = bylines[i];
-		if (!byline.innerHTML.startsWith('posted by')) continue;
+		if (!byline.innerHTML.startsWith('posted by ')) continue;
 		var userlink = byline.getElementsByTagName('a')[0];
 		var username = userlink.innerHTML;
-		if (username.startsWith('<span style=')) continue;
-		var hash = hashCode(username);
-		userlink.innerHTML = hashToColorSpan(hash) +
-			'<big>' + hashToSymbol(hash) + '</big> ' + username + '</span>';
+		if (username.startsWith('<big class="user-makeup">')) continue;
+		var makeup = hashToMakeup(hashCode(username));
+		userlink.style.backgroundColor = makeup.color;
+		userlink.style.color = makeup.contrast;
+		userlink.innerHTML = '<big class="user-makeup">' + makeup.symbol + ' </big>' + username;
 	}
 }
 
