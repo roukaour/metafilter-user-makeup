@@ -19,7 +19,7 @@ function hashCode(s) {
 		hash = s.charCodeAt(i) + ((hash << 5) - hash);
 	}
 	return hash;
-} 
+}
 
 function luma(r, g, b) {
 	// sRGB to RGB and RGB to luma formulas from W3C accessibility guidelines
