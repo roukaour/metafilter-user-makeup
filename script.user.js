@@ -4,7 +4,7 @@
 // @description Assigns each MetaFilter user a random but consistent color and symbol.
 // @include     *://*.metafilter.com/*
 // @require     https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js
-// @version     1.7
+// @version     1.8
 // @grant       none
 // @run-at      document-end
 // ==/UserScript==
@@ -13,6 +13,10 @@
 // https://metatalk.metafilter.com/24039/Color-Comments-By-User
 // https://github.com/valrus/mefi-comment-colors/
 
+// Tip from GreaseSpot wiki
+// http://wiki.greasespot.net/@grant#Scope
+this.$ = this.jQuery = jQuery.noConflict(true);
+
 function hashCode(s) {
 	// String#hashCode from Java
 	var hash = 0;
@@ -20,7 +24,7 @@ function hashCode(s) {
 		hash = s.charCodeAt(i) + ((hash << 5) - hash);
 	}
 	return hash;
-} 
+}
 
 function luma(r, g, b) {
 	// sRGB to RGB and RGB to luma formulas from W3C accessibility guidelines
