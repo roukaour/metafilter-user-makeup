@@ -4,7 +4,7 @@
 // @description Assigns each MetaFilter user a random but consistent color and symbol.
 // @include     *://*.metafilter.com/*
 // @require     https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js
-// @version     1.6
+// @version     1.7
 // @grant       none
 // @run-at      document-end
 // ==/UserScript==
@@ -49,7 +49,7 @@ function hashToColorSpan(x) {
 
 function hashToSymbol(x) {
 	var symbols = '●■▲▼◆▰★✪♠♣♥♦◈◉✠✿';
-	var i = (x & 0xF000000) / 0x1000000;
+	var i = (x & 0xF000000) >> 24;
 	return symbols.substring(i, i + 1);
 }
 
