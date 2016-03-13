@@ -69,4 +69,4 @@ function applyMakeup() {
 }
 
 applyMakeup();
-$("#newcomments").on('mefi-comments', applyMakeup);
+$('#newcomments').on('mefi-comments', applyMakeup);
