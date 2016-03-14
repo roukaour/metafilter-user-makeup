@@ -4,7 +4,7 @@
 // @description Assigns each MetaFilter user a random but consistent color and symbol.
 // @include     *://*.metafilter.com/*
 // @require     https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js
-// @version     1.10
+// @version     1.11
 // @grant       none
 // @run-at      document-end
 // ==/UserScript==
@@ -50,7 +50,9 @@ function hashToMakeup(hash) {
 
 function applyMakeup() {
 	var userlinks = document.querySelectorAll('.smallcopy a[href^="/user/"], \
-		.copy a[href^="/user/"]:not([href$="rss"])');
+		.smallcopy a[href*="metafilter.com/user/"], \
+		.copy a[href^="/user/"]:not([href$="rss"]), \
+		.copy a[href*="metafilter.com/user/"]:not([href$="rss"])');
 	for (var i = 0; i < userlinks.length; i++) {
 		var userlink = userlinks[i];
 		var username = userlink.innerHTML;
