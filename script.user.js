@@ -13,6 +13,10 @@
 // https://metatalk.metafilter.com/24039/Color-Comments-By-User
 // https://github.com/valrus/mefi-comment-colors/
 
+// Tip from GreaseSpot wiki
+// http://wiki.greasespot.net/@grant#Scope
+this.$ = this.jQuery = jQuery.noConflict(true);
+
 function hashCode(s) {
 	// String#hashCode from Java
 	var hash = 0;
@@ -61,7 +65,8 @@ function applyMakeup() {
 		var makeup = hashToMakeup(hashCode(username));
 		userlink.style.backgroundColor = makeup.color;
 		userlink.style.color = makeup.contrast;
-		userlink.innerHTML = '<big class="user-makeup">' + makeup.symbol + '&nbsp;</big>' + username;
+		userlink.innerHTML = '<big class="user-makeup">' + makeup.symbol +
+			'&nbsp;</big>' + username;
 	}
 }
 
