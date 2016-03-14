@@ -57,7 +57,7 @@ function applyMakeup() {
 		var userlink = userlinks[i];
 		var username = userlink.innerHTML;
 		if (username.startsWith('<big class="user-makeup">')) continue;
-		if (username.endsWith('...') && typeof userlink.title != 'undefined') {
+		if (username.endsWith('...') && userlink.title.startsWith(username.slice(0, -3))) {
 			username = userlink.title;
 		}
 		var makeup = hashToMakeup(hashCode(username));
