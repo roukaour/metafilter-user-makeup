@@ -49,9 +49,8 @@ function hashToMakeup(hash) {
 }
 
 function applyMakeup() {
-	var userlinks = document.querySelectorAll(' \
-		.smallcopy a[href*="metafilter.com/user/"], \
-		.copy a[href*="metafilter.com/user/"]:not([href$="rss"])');
+	var userlinks = document.querySelectorAll('.smallcopy a[href^="/user/"], \
+		.copy a[href^="/user/"]:not([href$="rss"])');
 	for (var i = 0; i < userlinks.length; i++) {
 		var userlink = userlinks[i];
 		var username = userlink.innerHTML;
