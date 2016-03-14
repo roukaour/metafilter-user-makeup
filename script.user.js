@@ -4,14 +4,21 @@
 // @description Assigns each MetaFilter user a random but consistent color and symbol.
 // @include     *://*.metafilter.com/*
 // @require     https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js
-// @version     1.11
-// @grant       none
+// @version     1.12
+// @grant       GM_addStyle
 // @run-at      document-end
 // ==/UserScript==
 
 // Inspired by valrus' Colorful Comments
 // https://metatalk.metafilter.com/24039/Color-Comments-By-User
 // https://github.com/valrus/mefi-comment-colors/
+
+GM_addStyle('.user-makeup { \
+	display: inline-box; \
+	border: 1px solid transparent; \
+	border-radius: 2px; \
+	padding: 0 2px; \
+}');
 
 function hashCode(s) {
 	// String#hashCode from Java
@@ -56,14 +63,16 @@ function applyMakeup() {
 	for (var i = 0; i < userlinks.length; i++) {
 		var userlink = userlinks[i];
 		var username = userlink.innerHTML;
-		if (username.startsWith('<big class="user-makeup">')) continue;
+		if ($(userlink).hasClass('user-makeup')) continue;
+		$(userlink).addClass('user-makeup');
 		if (username.endsWith('...') && userlink.title.startsWith(username.slice(0, -3))) {
 			username = userlink.title;
 		}
 		var makeup = hashToMakeup(hashCode(username));
 		userlink.style.backgroundColor = makeup.color;
+		userlink.style.borderColor = makeup.color;
 		userlink.style.color = makeup.contrast;
-		userlink.innerHTML = '<big class="user-makeup">' + makeup.symbol + '&nbsp;</big>' + username;
+		userlink.innerHTML = '<big>' + makeup.symbol + '&nbsp;</big>' + username;
 	}
 }
 
