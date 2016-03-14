@@ -4,7 +4,7 @@
 // @description Assigns each MetaFilter user a random but consistent color and symbol.
 // @include     *://*.metafilter.com/*
 // @require     https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js
-// @version     1.8
+// @version     1.9
 // @grant       none
 // @run-at      document-end
 // ==/UserScript==
@@ -49,18 +49,19 @@ function hashToMakeup(hash) {
 }
 
 function applyMakeup() {
-	var bylines = document.getElementsByClassName('smallcopy');
-	var i = bylines.length;
-	while (i--) {
-		var byline = bylines[i];
-		if (!byline.innerHTML.startsWith('posted by ')) continue;
-		var userlink = byline.getElementsByTagName('a')[0];
+	var userlinks = document.querySelectorAll('.smallcopy a[href*="/user/"], \
+		.copy a[href*="/user/"]:not([href$="rss"])');
+	for (var i in userlinks) {
+		var userlink = userlinks[i];
 		var username = userlink.innerHTML;
 		if (username.startsWith('<big class="user-makeup">')) continue;
+		if (username.endsWith('...') && typeof userlink.title != 'undefined') {
+			username = userlink.title;
+		}
 		var makeup = hashToMakeup(hashCode(username));
 		userlink.style.backgroundColor = makeup.color;
 		userlink.style.color = makeup.contrast;
-		userlink.innerHTML = '<big class="user-makeup">' + makeup.symbol + ' </big>' + username;
+		userlink.innerHTML = '<big class="user-makeup">' + makeup.symbol + '&nbsp;</big>' + username;
 	}
 }
 
